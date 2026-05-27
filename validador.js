@@ -73,6 +73,14 @@ class ValidadorCSV {
    * @returns {Promise<void>}
    */
   async guardarValidos() {
+    if (this.emailsValidos.length === 0) {
+      try {
+        await fs.unlink('validos.txt');
+      } catch {
+        // El archivo no existe, no hay nada que borrar
+      }
+      return;
+    }
     const contenido = this.emailsValidos.join('\n');
     await fs.writeFile('validos.txt', contenido, 'utf-8');
     console.log(`✔ Emails válidos guardados en "validos.txt" (${this.emailsValidos.length} registros)`);
@@ -83,11 +91,18 @@ class ValidadorCSV {
    * @returns {Promise<void>}
    */
   async guardarInvalidos() {
+    if (this.emailsInvalidos.length === 0) {
+      try {
+        await fs.unlink('invalidos.txt');
+      } catch {
+        // El archivo no existe, no hay nada que borrar
+      }
+      return;
+    }
     const contenido = this.emailsInvalidos.join('\n');
     await fs.writeFile('invalidos.txt', contenido, 'utf-8');
     console.log(`✘ Emails inválidos guardados en "invalidos.txt" (${this.emailsInvalidos.length} registros)`);
   }
-
   /**
    * Método de conveniencia: ejecuta todo el flujo completo.
    * @returns {Promise<void>}
